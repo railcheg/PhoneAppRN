@@ -9,12 +9,12 @@ const SelectAndChange = ({mode = MODES.SELECT, setMode = () => {}}) => (
 			<Button
 				active={mode === MODES.SELECT}
 				onPress={() => setMode(MODES.SELECT)}>
-				<Text>Статьи</Text>
+				<Text>Выбрать</Text>
 			</Button>
 			<Button
 				active={mode === MODES.CHANGE}
 				onPress={() => setMode(MODES.CHANGE)}>
-				<Text>Подкасты</Text>
+				<Text>Изменить</Text>
 			</Button>
 		</FooterTab>
 	</Footer>

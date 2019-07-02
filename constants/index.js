@@ -1,4 +1,4 @@
 export const MODES = {
-	SELECT: 'Выбрать',
-	CHANGE: 'Изменить'
+	SELECT: 'SELECT',
+	CHANGE: 'CHANGE'
 };
