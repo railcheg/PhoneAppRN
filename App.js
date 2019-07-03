@@ -1,17 +1,15 @@
 import React from 'react';
-import {Container, Content} from 'native-base';
-import {StyleSheet, Text, View} from 'react-native';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import reducers from './reducers';
-import {MODES} from './constants';
-import ButtonContainer from './containers/ButtonContainer.js';
+import {Container, Content, Footer, FooterTab, Button, Text} from 'native-base';
+import {StyleSheet, View} from 'react-native';
+import Svg, {
+    Circle,
+    Rect,
+    Path,
+    Line,
+    G
 
-const initialState = {
-    mode: MODES.SELECT
-};
+} from 'react-native-svg';
 
-const store = createStore(reducers, initialState);
 
 const styles = StyleSheet.create({
     container: {
@@ -22,21 +20,102 @@ const styles = StyleSheet.create({
     },
 });
 
-const App = () => (
-    <Provider store={store}>
-        <Container>
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {start: true};
+    }
+
+    componentWillMount() {
+        this.intervalId = setInterval(this.timer.bind(this), 1000);
+    }
+
+    timer() {
+        let dt = new Date(),
+            hours = dt.getHours(),
+            minutes = dt.getMinutes(),
+            seconds = dt.getSeconds(),
+            degSeconds = 180 + 360 / 60 * seconds,
+            degMinutes = 180 + 360 / 60 * minutes,
+            degHours = 180 + 360 / 12 * (hours % 12) + degMinutes / 60;
+        this.setState({degSeconds: degSeconds, degMinutes: degMinutes, degHours: degHours});
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
+    }
+
+    setMode() {
+
+    }
+
+    render() {
+        return <Container>
             <Content>
                 <View style={styles.container}>
                     <Text>
-                       React Native app
+                        Clock
                     </Text>
+
+                    <Svg
+                        height="300"
+                        width="300"
+                    >
+                        <Circle cx="140" cy="140" r="140" fill="grey"/>
+                        <Circle cx="140" cy="140" r="130" fill="white"/>
+                        <Circle cx="140" cy="140" r="4" fill="black"/>
+                        <Line
+                            origin="140, 140"
+                            x1="140"
+                            y1="140"
+                            x2="140"
+                            y2="260"
+                            rotation={this.state.degSeconds}
+                            stroke="red"
+                            strokeWidth="1"
+                        />
+                        <Line
+                            origin="140, 140"
+                            x1="140"
+                            y1="140"
+                            x2="140"
+                            y2="220"
+                            rotation={this.state.degMinutes}
+                            stroke="black"
+                            strokeWidth="2"
+                        />
+                        <G
+                            rotation={this.state.degHours}
+                            origin="140, 140"
+                        >
+                            <Line
+                                x1="140"
+                                y1="140"
+                                x2="140"
+                                y2="200"
+                                stroke="black"
+                                strokeWidth="4"
+                            />
+                        </G>
+                    </Svg>
                 </View>
             </Content>
-            <ButtonContainer/>
+            <Footer>
+                <FooterTab>
+                    <Button
+                        success
+                        onPress={this.setMode()}>
+                        <Text>Выбрать</Text>
+                    </Button>
+                    <Button
+                        danger
+                        onPress={this.setMode()}>
+                        <Text>Выйти</Text>
+                    </Button>
+                </FooterTab>
+            </Footer>
         </Container>
-    </Provider>
-);
-
-export default App;
+    }
+};
 
 
